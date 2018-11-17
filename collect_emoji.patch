@@ -1,0 +1,43 @@
+diff --git a/collect_emoji_svg.py b/collect_emoji_svg.py
+index ea39cbde..0de363f9 100755
+--- a/collect_emoji_svg.py
++++ b/collect_emoji_svg.py
+@@ -58,12 +58,19 @@ def _flag_rename(f):
+   cp_strs = []
+   name, ext = os.path.splitext(f)
+   if len(name) != 2:
+-    raise ValueError('illegal flag name "%s"' % f)
+-  for cp in name:
+-    if not ('A' <= cp <= 'Z'):
+-      raise ValueError('illegal flag name "%s"' % f)
+-    ncp = 0x1f1e6 - 0x41 + ord(cp)
+-    cp_strs.append("%04x" % ncp)
++    # extended country code, remove hyphen
++    cp_strs.append('1f3f4') # black flag start
++    for cp in name.lower():
++      if not ('a' <= cp <= 'z'):
++        continue
++      cp_strs.append("%04x"%(0xe0000 + ord(cp)))
++    cp_strs.append('e007f') # stop code
++  else:
++    for cp in name:
++      if not ('A' <= cp <= 'Z'):
++        raise ValueError('illegal flag name "%s"' % f)
++      ncp = 0x1f1e6 - 0x41 + ord(cp)
++      cp_strs.append("%04x" % ncp)
+   return 'emoji_u%s%s' % ('_'.join(cp_strs), ext)
+ 
+ 
+@@ -78,7 +85,11 @@ def copy_with_rename(src_dir, dst_dir, accept_pred=None, rename=None):
+   for src_filename in os.listdir(src_dir):
+     if accept_pred and not accept_pred(src_filename):
+       continue
+-    dst_filename = rename(src_filename) if rename else src_filename
++    try:
++      dst_filename = rename(src_filename) if rename else src_filename
++    except ValueError:
++      print('rename failed for ' + src_filename)
++      continue
+     src = os.path.join(src_dir, src_filename)
+     dst = os.path.join(dst_dir, dst_filename)
+     if os.path.exists(dst):
