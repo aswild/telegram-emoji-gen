@@ -8,6 +8,9 @@ AUR package which I maintain.
 
 ## Build Instructions
 
+**Note!** You may need to clear Telegram's emoji cache after updating to a new version with replaced
+emoji. I still saw the Apple emoji until I deleted the directory `~/.TelegramDesktop/tdata/emoji`
+
 ### I. Prerequisites
 * python3 (for my scripts)
 * python2 (for Google's Noto tools)
