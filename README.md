@@ -27,20 +27,19 @@ figuring out the proper order of emoji that Telegram expects.
 3. Use `gyp` and `cmake` to set up Makefiles (the details of this step are left as an exercise for
    the reader)
 4. cd to `tdesktop/out/Release` and run `make codegen_emoji`
-5. run `./codegen_emoji >emojilist.txt` and copy `emojilist.txt` to this repo
+5. run `./codegen_emoji ../../Telegram/Resources/emoji_autocomplete.json >emojilist.txt` and copy `emojilist.txt` to this repo
    1. This creates a file that contains one emoji per line
 
 ### II. Get and prepare the Noto Color Emoji
 1. Clone noto-emoji and nototools into this directory
 ```
-git clone https://github.com/googlei18n/noto-emoji
-git clone https://github.com/googlei18n/nototools noto-emoji/nototools
+git submodule update --init
 ```
-2. Apply `collect_emoji.patch` to the noto-emoji directory.
-3. Run `collect_emoji_svg.py` in the noto-emoji directory
+2. Apply `collect_emoji.patch` and run `collect_emoji_svg.py` in the noto-emoji directory.
 ```
 cd noto-emoji
-PYTHONPATH=$PWD/nototools python2 collect_emoji_svg.py out -f third_party/region-flags/svg -e svg
+patch -p1 -i ../collect_emoji.patch
+PYTHONPATH=$PWD/../nototools python2 collect_emoji_svg.py out -f third_party/region-flags/svg -e svg
 cd ..
 ```
 This will collect all the SVG emoji and flag files into a single `noto-emoji/out` directory.
@@ -63,7 +62,7 @@ This step's easy:
 * [PeterCxy](https://github.com/PeterCxy) for making the original
   `telegram-desktop-systemqt-notoemoji` AUR package before I adopted it.
 * OriginCode on the AUR site for pointing out to me that Telegram recently refactored their emoji
-  code, spuring me to figure all this out and update it.
+  code, spurring me to figure all this out and update it.
 
 # License
 * [Telegram Desktop](https://github.com/telegramdesktop/tdesktop/blob/dev/LEGAL) is copyright John
