@@ -1,0 +1,6 @@
+[submodule "noto-emoji"]
+	path = noto-emoji
+	url = https://github.com/googlei18n/noto-emoji
+[submodule "nototools"]
+	path = nototools
+	url = https://github.com/googlei18n/nototools
